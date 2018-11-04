@@ -1,6 +1,8 @@
 #include<iostream>
 
-void main()
+int main()
 {
-std::cout << "Hello 3!";
+
+	system("pause");
+	return 0;
 }
