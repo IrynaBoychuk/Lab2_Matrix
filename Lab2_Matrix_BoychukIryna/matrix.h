@@ -7,14 +7,18 @@ using namespace std;
 class Matrix
 {
 private:
-	int size;
+	double **M;
+	int size_row, size_column;
 public:
 	Matrix();
-	Matrix& operator =(const Matrix& M);
-	Matrix operator ==(Matrix & M);
-	Matrix operator + (Matrix & M);
-	Matrix operator - (Matrix & M);
-	Matrix operator * (Matrix & M);
+	Matrix(int, int, double);// Конструктор, що відповідає за нульову матрицю
+	Matrix& operator =(const Matrix& matrix);// матриці присвоюється повністю tелементи іншої матриці
+	Matrix& operator =(const double& matrix); // елементи в матриці присвоюються по черзі
+	Matrix operator ==(Matrix & matrix); // todo
+	Matrix operator + (Matrix & matrix);
+	Matrix operator - (Matrix & matrix);
+	Matrix operator * (Matrix & matrix);// matrix*matrix
+	Matrix operator * (double & matrix); // chislo
 	//todo оператор обертання матриці
 	// оператор вводу і виводу
 	//	доступ до елемента
