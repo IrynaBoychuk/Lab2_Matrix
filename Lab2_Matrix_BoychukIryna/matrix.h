@@ -11,15 +11,27 @@ private:
 	int size_row, size_column;
 public:
 	Matrix();
-	Matrix(int, int, double);// Конструктор, що відповідає за нульову матрицю
-	Matrix& operator =(const Matrix& matrix);// матриці присвоюється повністю tелементи іншої матриці
-	Matrix& operator =(const double& matrix); // елементи в матриці присвоюються по черзі
-	Matrix operator ==(Matrix & matrix); // todo
+	Matrix(int m, int n): Matrix( m,  n, false){}
+	Matrix(int, int, bool);// Конструктор, що відповідає за нульову матрицю
+
+	Matrix& operator =(const Matrix& matrix);// матриці присвоюється повністю елементи іншої матриці
+	Matrix& operator =(const double& num); // матриця заповнюється однаковим числом
+	bool operator ==(Matrix & matrix); // todo
 	Matrix operator + (Matrix & matrix);
 	Matrix operator - (Matrix & matrix);
 	Matrix operator * (Matrix & matrix);// matrix*matrix
-	Matrix operator * (double & matrix); // chislo
-	//todo оператор обертання матриці
-	// оператор вводу і виводу
-	//	доступ до елемента
+	Matrix operator * (double num); // matrix*num
+
+	friend Matrix operator ~(Matrix matrix);
+	double* operator [](int); //	доступ до елемента
+    void Gauss();
+	Matrix Matrix::getGaussResult(Matrix upper); //лишає тільки головну діагональ
+
+	friend ostream & operator<<(ostream & os, const Matrix & that);
+	friend istream & operator>>(istream & os, const Matrix & that);
+	void swapRows(int, int);
+	int argMax(int k);
+	int size_rows() { return size_row; };
+	int size_columns() { return size_column; };
+	void checkResult(Matrix task, Matrix answer);
 };
