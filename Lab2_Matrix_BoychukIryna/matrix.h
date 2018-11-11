@@ -3,6 +3,13 @@
 #include<iostream>
 
 using namespace std;
+enum FillMethod {
+	Zero=0,
+	Random=1,
+	Console=2,
+	Gilbert=3
+};
+
 
 class Matrix
 {
@@ -11,8 +18,8 @@ private:
 	int size_row, size_column;
 public:
 	Matrix();
-	Matrix(int m, int n): Matrix( m,  n, false){}
-	Matrix(int, int, bool);// Конструктор, що відповідає за нульову матрицю
+	Matrix(int m, int n): Matrix( m,  n, Zero){}
+	Matrix(int, int, FillMethod);
 
 	Matrix& operator =(const Matrix& matrix);// матриці присвоюється повністю елементи іншої матриці
 	Matrix& operator =(const double& num); // матриця заповнюється однаковим числом
@@ -35,3 +42,5 @@ public:
 	int size_columns() { return size_column; };
 	void checkResult(Matrix task, Matrix answer);
 };
+
+

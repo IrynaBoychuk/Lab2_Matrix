@@ -1,8 +1,11 @@
 #include "Matrix.h"
 #include <time.h>
 #include <iostream>
+#include <algorithm> 
 
 using namespace std;
+
+
 
 Matrix::Matrix()
 {
@@ -15,7 +18,7 @@ Matrix::Matrix()
 
 Matrix& Matrix::operator=(const Matrix& matrix)
 {
-	
+
 	for (int i = 0; i < matrix.size_row; i++)
 	{
 		for (int j = 0; j < matrix.size_column; j++)
@@ -27,7 +30,6 @@ Matrix& Matrix::operator=(const Matrix& matrix)
 
 Matrix& Matrix::operator=(const double& num)
 {
-	//TODO exception
 	for (int i = 0; i < this->size_row; i++)
 	{
 		for (int j = 0; j < this->size_column; j++)
@@ -40,7 +42,8 @@ Matrix& Matrix::operator=(const double& num)
 
 Matrix Matrix::operator +(Matrix & matrix)
 {
-	Matrix matrixTemp(matrix.size_row, matrix.size_column, 0);
+	//ToDO
+	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
 
 	for (int i = 0; i < matrix.size_row; i++)
 	{
@@ -55,7 +58,7 @@ Matrix Matrix::operator +(Matrix & matrix)
 
 Matrix Matrix::operator -(Matrix & matrix)
 {
-	Matrix matrixTemp(matrix.size_row, matrix.size_column, 0);
+	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
 
 	for (int i = 0; i < matrix.size_row; i++)
 	{
@@ -70,7 +73,7 @@ Matrix Matrix::operator -(Matrix & matrix)
 Matrix Matrix::operator*(Matrix & matrix)
 {
 
-	Matrix matrixTemp(matrix.size_row, matrix.size_column, 0);
+	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
 
 	if (matrix.size_row == this->size_row && size_column == this->size_column)
 	{
@@ -89,7 +92,7 @@ Matrix Matrix::operator*(Matrix & matrix)
 
 Matrix Matrix::operator*(double num)
 {
-	Matrix matrixTemp(this->size_row, this->size_column, 0);
+	Matrix matrixTemp(this->size_row, this->size_column, Zero);
 	double k, m;
 	for (int i = 0; i < this->size_row; i++)
 	{
@@ -105,7 +108,7 @@ Matrix Matrix::operator*(double num)
 	return matrixTemp;
 }
 
-Matrix::Matrix(int m, int n, bool fillRandom)
+Matrix::Matrix(int m, int n, FillMethod fillRandom)
 {
 	size_row = m;
 	size_column = n;
@@ -113,37 +116,65 @@ Matrix::Matrix(int m, int n, bool fillRandom)
 	M = new double*[size_row];
 	for (int i = 0; i < size_row; i++)
 		M[i] = new double[size_column] {};
-
+	double k = 0, a;
 	//Заповнення
-	if (fillRandom)
+	switch (fillRandom)
 	{
+	case Random:
 		srand(time(0));
 		for (int i = 0; i < size_row; i++)
 			for (int j = 0; j < size_column; j++)
 				M[i][j] = abs(rand() % 10 + 1);
-	}
-	else 
-	{
-		cout << "Input Matrix:  ";
+		break;
+	case Gilbert:
+		cout << "Input last column:  " << endl;
+		for (int i = 0; i < size_row; i++)
+		{
+			cin >> a;
+			M[i][size_column-1] = a;
+		}
+		for (int i = 0; i < size_row; i++)
+		{
+			k = i + 1;
+			for (int j = 0; j < size_column - 1; j++)
+			{
+				M[i][j] = 1 / k;
+				k++;
+			}
+
+		}
+		break;
+	case Console:
+		cout << "Input Matrix:  " << endl;
+		for (int i = 0; i < size_row; i++) {
+			for (int j = 0; j < size_column; j++) {
+				cin >> M[i][j];
+			}
+		}
+		break;
+	default:
 		for (int i = 0; i < size_row; i++)
 			for (int j = 0; j < size_column; j++)
-				cin >> M[i][j];
+				M[i][j] = 0;
+		break;
 	}
+
 }
+
 
 
 
 Matrix operator~(Matrix matrix)
 {
 	int k = 0, n = 0;
-	Matrix matrixTemp(matrix.size_row, matrix.size_column, 0);
+	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
 
-	for (int i = 0; i < matrix.size_row; i++,n++)
+	for (int i = 0; i < matrix.size_row; i++, n++)
 	{
 		k = 0;
-		for (int j = 0; j<matrixTemp.size_column; j++,k++)
+		for (int j = 0; j < matrixTemp.size_column; j++, k++)
 		{
-			matrixTemp[j][i] = matrix[i][j];			
+			matrixTemp[j][i] = matrix[i][j];
 		}
 	}
 	return matrixTemp;
@@ -186,7 +217,7 @@ bool Matrix:: operator==(Matrix & matrix)
 {
 	for (int i = 0; i < matrix.size_row; i++)
 	{
-		for (int j = 0; j <matrix .size_column; j++)
+		for (int j = 0; j < matrix.size_column; j++)
 
 			if (*this[i][j] != matrix[i][j])
 			{
@@ -201,15 +232,15 @@ void Matrix::checkResult(Matrix task, Matrix answer) {
 	for (int row = 0; row < task.size_rows(); row++)
 	{
 		double sum = 0;
-		cout <<endl << "row " << row << endl;
-		for (int column = 0; column < task.size_columns()-1; column++)
+		cout << endl << "row " << row << endl;
+		for (int column = 0; column < task.size_columns() - 1; column++)
 		{
-			cout<< task[row][column] <<"*"<<answer[column][answer.size_columns() - 1] <<endl;
+			cout << task[row][column] << "*" << answer[column][answer.size_columns() - 1] << endl;
 			sum += task[row][column] * answer[column][answer.size_columns() - 1];
 		}
-			cout << "sum " << sum << endl;
-			cout << "task "<< task[row][task.size_columns() - 1]<<endl;
-			cout << sum - task[row][task.size_columns() - 1] <<endl;
+		cout << "sum " << sum << endl;
+		cout << "task " << task[row][task.size_columns() - 1] << endl;
+		cout << sum - task[row][task.size_columns() - 1] << endl;
 		if (sum != task[row][task.size_columns() - 1]) {
 			cout << row << " error" << endl;
 		}
@@ -218,45 +249,49 @@ void Matrix::checkResult(Matrix task, Matrix answer) {
 
 void Matrix::Gauss()
 {
-	int i = 0;
-	int k = 1; 
-	int j = 0;
+	if (size_column - size_row != 1)
+		throw "Unsupported matrix size";
+	int otherRow = 0;
+	int currentRow = 1;
+	int col = 0;
 
 	double y = 0;
 	Matrix matrixTemp = *this;
-	
+
 	double a = 0;
 	double b = 0;
 
-	for (k = 1; k < size_row; k++)
+	for (currentRow = 0; currentRow < size_row; currentRow++)
 	{
-		for (i = k; i < size_row; i++)
+		swapRows(currentRow, argMax(currentRow));
+		for (otherRow = currentRow + 1; otherRow < size_row; otherRow++)
 		{
-			y = matrixTemp[i][k - 1] / matrixTemp[k - 1][k - 1];
-			for (j = 0; j < size_column; j++)
+			y = matrixTemp[otherRow][currentRow] / matrixTemp[currentRow][currentRow];
+			for (col = 0; col < size_column; col++)
 			{
-				a = matrixTemp[i][j];
-				b = matrixTemp[k - 1][j];
-				matrixTemp[i][j] = a - b * y;
+				a = matrixTemp[otherRow][col];
+				b = matrixTemp[currentRow][col];
+				matrixTemp[otherRow][col] = a - b * y;
 			}
 		}
 	}
+	cout << matrixTemp;
 	Matrix result = getGaussResult(matrixTemp);
 	//cout << getGaussResult(matrixTemp)<< endl;
 	//checkResult(*this, getGaussResult(matrixTemp));
 
-	
-		for (int row = 0; row < size_row; row++)
-			cout << "x" << row+1 << "=" << result[row][size_column - 1] << endl;
+
+	for (int row = 0; row < size_column - 1; row++)
+		cout << "x" << row + 1 << "=" << result[row][size_column - 1] << endl;
 }
 
 Matrix Matrix::getGaussResult(Matrix matrixTemp) {
-	for (int k = size_row-2; k >= 0; k--)
+	for (int k = size_row - 2; k >= 0; k--)
 	{
-		for (int i = k; i >=0; i--)
+		for (int i = k; i >= 0; i--)
 		{
 			double y = matrixTemp[i][k + 1] / matrixTemp[k + 1][k + 1];
-			for (int j = size_column-1 ; j>=0; j--)
+			for (int j = size_column - 1; j >= 0; j--)
 			{
 				double a = matrixTemp[i][j];
 				double b = matrixTemp[k + 1][j];
@@ -277,8 +312,8 @@ Matrix Matrix::getGaussResult(Matrix matrixTemp) {
 	return matrixTemp;
 }
 
-void Matrix :: swapRows(int row1, int row2)
-{	
+void Matrix::swapRows(int row1, int row2)
+{
 	int p;
 	if (row1 != row2)
 	{
@@ -293,10 +328,10 @@ void Matrix :: swapRows(int row1, int row2)
 
 //
 int Matrix::argMax(int column)
-{	
-	int max = M[0][column];
-	int rowMax=0;
-	for (int selectRow= 1; selectRow < size_row; selectRow++)
+{
+	int max = M[column][column];
+	int rowMax = column;
+	for (int selectRow = column + 1; selectRow < size_row; selectRow++)
 	{
 		if (max < M[selectRow][column])
 		{

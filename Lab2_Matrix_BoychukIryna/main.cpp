@@ -2,8 +2,8 @@
 #include"matrix.h"
 
 void TestOperators() {
-	Matrix FirstMatrix(5, 5, true);
-	Matrix SecondMatrix(5, 5, true);
+	Matrix FirstMatrix(5, 5, Random);
+	Matrix SecondMatrix(5, 5, Random);
 
 	cout << FirstMatrix << endl;
 
@@ -19,7 +19,7 @@ void TestOperators() {
 
 int main()
 {
-	Matrix FirstMatrix(5, 6, true);
+	Matrix FirstMatrix(3, 4, Gilbert);
 
 	cout << FirstMatrix << endl;
 	FirstMatrix.Gauss();
