@@ -17,13 +17,27 @@ void TestOperators() {
 
 }
 
+using namespace std;
 int main()
 {
-	Matrix FirstMatrix(3, 4, Gilbert);
+	try
+	{
+		Matrix FirstMatrix(3, 4, Random);
+		Matrix SecondMatrix(4, 4, Random);
+		cout << FirstMatrix << endl;
+		cout << ~FirstMatrix << endl;
+		cout << SecondMatrix << endl;
+		cout << FirstMatrix * SecondMatrix << endl;
 
-	cout << FirstMatrix << endl;
-	FirstMatrix.Gauss();
-	//TestOperators();
+
+		FirstMatrix.Gauss();
+		//TestOperators();
+	}
+	catch (char* ex)
+	{
+		cout << "Mistake:" << ex;
+	}
+	
 	system("pause");
 	return 0;
 }

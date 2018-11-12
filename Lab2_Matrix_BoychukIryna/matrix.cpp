@@ -13,101 +13,6 @@ Matrix::Matrix()
 	size_column = 0;
 }
 
-
-
-
-Matrix& Matrix::operator=(const Matrix& matrix)
-{
-
-	for (int i = 0; i < matrix.size_row; i++)
-	{
-		for (int j = 0; j < matrix.size_column; j++)
-			this->M[i][j] = matrix.M[i][j];
-
-	}
-	return *this;
-}
-
-Matrix& Matrix::operator=(const double& num)
-{
-	for (int i = 0; i < this->size_row; i++)
-	{
-		for (int j = 0; j < this->size_column; j++)
-			this->M[i][j] = num;
-
-	}
-	return *this;
-}
-
-
-Matrix Matrix::operator +(Matrix & matrix)
-{
-	//ToDO
-	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
-
-	for (int i = 0; i < matrix.size_row; i++)
-	{
-		for (int j = 0; j < matrix.size_column; j++)
-
-			matrixTemp.M[i][j] = this->M[i][j] + matrix.M[i][j];
-
-
-	}
-	return matrixTemp;
-}
-
-Matrix Matrix::operator -(Matrix & matrix)
-{
-	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
-
-	for (int i = 0; i < matrix.size_row; i++)
-	{
-		for (int j = 0; j < matrix.size_column; j++)
-
-			matrixTemp.M[i][j] = this->M[i][j] - matrix.M[i][j];
-
-	}
-	return matrixTemp;
-}
-
-Matrix Matrix::operator*(Matrix & matrix)
-{
-
-	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
-
-	if (matrix.size_row == this->size_row && size_column == this->size_column)
-	{
-		for (int i = 0; i < size_row; i++)
-		{
-			for (int j = 0; j < matrix.size_column; j++)
-
-				for (int k = 0; k < matrix.size_row; k++)
-				{
-					matrixTemp.M[i][j] += this->M[i][k] * matrix.M[k][j];
-				}
-		}
-	}
-	return matrixTemp;
-}
-
-Matrix Matrix::operator*(double num)
-{
-	Matrix matrixTemp(this->size_row, this->size_column, Zero);
-	double k, m;
-	for (int i = 0; i < this->size_row; i++)
-	{
-		for (int j = 0; j < this->size_column; j++)
-
-		{
-			m = this->M[i][j];
-			k = m * num;
-			matrixTemp.M[i][j] = k;
-		}
-
-	}
-	return matrixTemp;
-}
-
 Matrix::Matrix(int m, int n, FillMethod fillRandom)
 {
 	size_row = m;
@@ -131,7 +36,7 @@ Matrix::Matrix(int m, int n, FillMethod fillRandom)
 		for (int i = 0; i < size_row; i++)
 		{
 			cin >> a;
-			M[i][size_column-1] = a;
+			M[i][size_column - 1] = a;
 		}
 		for (int i = 0; i < size_row; i++)
 		{
@@ -163,16 +68,117 @@ Matrix::Matrix(int m, int n, FillMethod fillRandom)
 
 
 
-
-Matrix operator~(Matrix matrix)
+Matrix& Matrix::operator=(const Matrix& matrix)
 {
-	int k = 0, n = 0;
-	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
-
-	for (int i = 0; i < matrix.size_row; i++, n++)
+	if (this != &matrix)
 	{
-		k = 0;
-		for (int j = 0; j < matrixTemp.size_column; j++, k++)
+
+		for (int i = 0; i < matrix.size_row; i++)
+		{
+			for (int j = 0; j < matrix.size_column; j++)
+				this->M[i][j] = matrix.M[i][j];
+
+		}
+	}
+	return *this;
+}
+
+Matrix& Matrix::operator=(const double& num)
+{
+	for (int i = 0; i < this->size_row; i++)
+	{
+		for (int j = 0; j < this->size_column; j++)
+			this->M[i][j] = num;
+
+	}
+	return *this;
+}
+
+
+Matrix Matrix::operator +(Matrix & matrix)
+{
+	if ((size_row == matrix.size_row) && (size_column == matrix.size_column))
+	{
+		Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
+		for (int i = 0; i < matrix.size_row; i++)
+		{
+			for (int j = 0; j < matrix.size_column; j++)
+
+				matrixTemp.M[i][j] = this->M[i][j] + matrix.M[i][j];
+
+		}
+		return matrixTemp;
+	}
+	else
+	{
+		throw "It is impossible to do addition";
+	}
+}
+
+Matrix Matrix::operator -(Matrix & matrix)
+{
+	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
+	if ((size_row == this->size_row) && (size_column == this->size_column))
+	{
+		for (int i = 0; i < matrix.size_row; i++)
+		{
+			for (int j = 0; j < matrix.size_column; j++)
+
+				matrixTemp.M[i][j] = this->M[i][j] - matrix.M[i][j];
+
+		}
+		return matrixTemp;
+	}
+	//TODO else
+}
+
+
+Matrix Matrix::operator*(Matrix & matrix)
+{
+	if (matrix.size_row == size_column)
+	{
+		Matrix matrixTemp(size_row, matrix.size_column, Zero);
+		for (int i = 0; i < size_row; i++)
+		{
+			for (int j = 0; j < matrix.size_column; j++)
+
+				for (int k = 0; k < matrix.size_row; k++)
+				{
+					matrixTemp.M[i][j] += this->M[i][k] * matrix.M[k][j];
+				}
+		}
+		return matrixTemp;
+	}
+	else throw "It is impossible to multiply matrixes";
+}
+
+Matrix Matrix::operator*(double num) const
+{
+	Matrix matrixTemp(this->size_row, this->size_column, Zero);
+	double k;
+	for (int i = 0; i < this->size_row; i++)
+	{
+		for (int j = 0; j < this->size_column; j++)
+
+		{
+			k = this->M[i][j] * num;
+			matrixTemp.M[i][j] = k;
+		}
+
+	}
+	return matrixTemp;
+}
+
+
+
+
+
+Matrix operator~(Matrix &matrix)
+{
+	Matrix matrixTemp(matrix.size_column, matrix.size_row, Zero);
+	for (int i = 0; i < matrix.size_row; i++)
+	{
+		for (int j = 0; j < matrix.size_column; j++)
 		{
 			matrixTemp[j][i] = matrix[i][j];
 		}
@@ -215,6 +221,8 @@ istream & operator>>(istream & os, const Matrix & matrix)
 
 bool Matrix:: operator==(Matrix & matrix)
 {
+	if (matrix.size_row != this->size_row && size_column != this->size_column)
+		return false;
 	for (int i = 0; i < matrix.size_row; i++)
 	{
 		for (int j = 0; j < matrix.size_column; j++)
@@ -247,6 +255,20 @@ void Matrix::checkResult(Matrix task, Matrix answer) {
 	}
 }
 
+
+bool Matrix::isSimmetrial()
+{
+	for (int i = 0; i < size_row; i++)
+	{
+		for (int j = 0; j < size_column; j++)
+		{
+			if (M[i][j] != M[j][i])
+				return false;
+		}
+	}
+	return true;
+}
+
 void Matrix::Gauss()
 {
 	if (size_column - size_row != 1)
@@ -277,15 +299,12 @@ void Matrix::Gauss()
 	}
 	cout << matrixTemp;
 	Matrix result = getGaussResult(matrixTemp);
-	//cout << getGaussResult(matrixTemp)<< endl;
-	//checkResult(*this, getGaussResult(matrixTemp));
-
 
 	for (int row = 0; row < size_column - 1; row++)
 		cout << "x" << row + 1 << "=" << result[row][size_column - 1] << endl;
 }
 
-Matrix Matrix::getGaussResult(Matrix matrixTemp) {
+Matrix Matrix::getGaussResult(Matrix &matrixTemp) {
 	for (int k = size_row - 2; k >= 0; k--)
 	{
 		for (int i = k; i >= 0; i--)
@@ -341,6 +360,48 @@ int Matrix::argMax(int column)
 	}
 	return rowMax;
 }
+
+void Matrix::deleteColumn(int num_column)
+{
+	for (int i = 0; i < size_row; i++)
+	{
+		for (int j = num_column - 1; j < size_column - 1; j++)
+		{
+			M[i][j] = M[i][j + 1];
+		}
+	}
+	--size_column;
+}
+
+//TODO хз поки для чого
+double Matrix::Norma()
+{
+	double temp = 0;
+	for (int j = 0; j < size_column; j++)
+	{
+		temp += M[0][j] * M[0][j];
+	}
+	return sqrt(temp);
+}
+
+double Matrix::scalMultiplication(Matrix &other)
+{
+	double temp = 0;
+	for (int j = 0; j < size_column; j++)
+		temp += M[0][j] * other.M[0][j];
+	return temp;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

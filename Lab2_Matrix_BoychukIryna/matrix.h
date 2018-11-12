@@ -27,15 +27,20 @@ public:
 	Matrix operator + (Matrix & matrix);
 	Matrix operator - (Matrix & matrix);
 	Matrix operator * (Matrix & matrix);// matrix*matrix
-	Matrix operator * (double num); // matrix*num
-
-	friend Matrix operator ~(Matrix matrix);
-	double* operator [](int); //	доступ до елемента
-    void Gauss();
-	Matrix Matrix::getGaussResult(Matrix upper); //лишаЇ т≥льки головну д≥агональ
-
+	Matrix operator * (double num) const; // matrix*num
 	friend ostream & operator<<(ostream & os, const Matrix & that);
 	friend istream & operator>>(istream & os, const Matrix & that);
+	friend Matrix operator ~(Matrix &matrix);
+	double* operator [](int); //	доступ до елемента
+	//TODO
+	double scalMultiplication(Matrix &matrix);
+
+    void Gauss();
+	//void Kachmag();
+	Matrix getGaussResult(Matrix &upper); //
+	bool isSimmetrial();
+	double Norma(); // дл€  јчмажа
+	void deleteColumn(int);  // дл€  јчмажа
 	void swapRows(int, int);
 	int argMax(int k);
 	int size_rows() { return size_row; };
