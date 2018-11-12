@@ -13,7 +13,7 @@ Matrix::Matrix()
 	size_column = 0;
 }
 
-Matrix::Matrix(int m, int n, FillMethod fillRandom)
+Matrix::Matrix(int m, int n, FillMethod fillMethod, double fillNumber)
 {
 	size_row = m;
 	size_column = n;
@@ -23,7 +23,7 @@ Matrix::Matrix(int m, int n, FillMethod fillRandom)
 		M[i] = new double[size_column] {};
 	double k = 0, a;
 	//Заповнення
-	switch (fillRandom)
+	switch (fillMethod)
 	{
 	case Random:
 		srand(time(0));
@@ -57,10 +57,15 @@ Matrix::Matrix(int m, int n, FillMethod fillRandom)
 			}
 		}
 		break;
-	default:
+	case Zero:
 		for (int i = 0; i < size_row; i++)
 			for (int j = 0; j < size_column; j++)
 				M[i][j] = 0;
+		break;
+	default:
+		for (int i = 0; i < size_row; i++)
+			for (int j = 0; j < size_column; j++)
+				M[i][j] = fillNumber;
 		break;
 	}
 
@@ -373,7 +378,7 @@ void Matrix::deleteColumn(int num_column)
 	--size_column;
 }
 
-//TODO хз поки для чого
+
 double Matrix::Norma()
 {
 	double temp = 0;
@@ -392,7 +397,63 @@ double Matrix::scalMultiplication(Matrix &other)
 	return temp;
 }
 
+double* Matrix::getRow(int ind)
+{
+	double* row = new double[size_column];
+	for (int i = 0; i < size_column; i++)
+	{
+		row[i] = M[ind-1][i];
+	}
+	return row;
+}
 
+double* Matrix::getColumn(int ind)
+{
+	double* column;
+	column = new double[size_row];
+	for (int i = 0; i < size_row; i++)
+	{
+	  column[i] = M[i][ind - 1];
+	}
+	return column;
+}
+
+Matrix Matrix::Kachmag()
+{
+	const double E = 0.0000000001;
+
+	double *tempRow = getColumn(size_column);
+	this->deleteColumn(size_column);
+	Matrix matrixTemp(1, size_column, Zero);
+	matrixTemp.M[0] = tempRow;
+
+	tempRow = getRow(1);
+	Matrix x(1, size_column, Zero);
+	x.M[0] = tempRow;
+	Matrix x1(1, size_column, Zero);
+
+	Matrix sub(1, size_column, Number,1);
+	Matrix matrixAi(1, size_column, Zero);
+	int j = 0;
+	double temp;
+	while (sub.Norma() > E)
+	{
+		tempRow = getRow(j + 1);
+		matrixAi.M[0] = tempRow;
+		temp = ((matrixTemp.M[0][j] - matrixAi.scalMultiplication(x)) / (matrixAi.Norma()*matrixAi.Norma()));
+
+		matrixAi = matrixAi * temp;
+		x1 = x + matrixAi;
+		sub = x1 - x;
+
+		x = x1;
+		if (j < size_row - 1)
+			j++;
+		else j = 0;
+	}
+	cout << x;
+	return x;
+}
 
 
 

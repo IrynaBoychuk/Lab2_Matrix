@@ -7,7 +7,8 @@ enum FillMethod {
 	Zero=0,
 	Random=1,
 	Console=2,
-	Gilbert=3
+	Gilbert=3,
+	Number = 4
 };
 
 
@@ -19,7 +20,7 @@ private:
 public:
 	Matrix();
 	Matrix(int m, int n): Matrix( m,  n, Zero){}
-	Matrix(int, int, FillMethod);
+	Matrix(int m, int n, FillMethod fillMethod = FillMethod::Zero, double fillNumber = 0);
 
 	Matrix& operator =(const Matrix& matrix);// матриці присвоюється повністю елементи іншої матриці
 	Matrix& operator =(const double& num); // матриця заповнюється однаковим числом
@@ -36,11 +37,13 @@ public:
 	double scalMultiplication(Matrix &matrix);
 
     void Gauss();
-	//void Kachmag();
+	Matrix Kachmag();
 	Matrix getGaussResult(Matrix &upper); //
 	bool isSimmetrial();
-	double Norma(); // для КАчмажа
+	double Norma(); // для Качмажа
 	void deleteColumn(int);  // для КАчмажа
+	double* getRow(int);
+	double* getColumn(int);
 	void swapRows(int, int);
 	int argMax(int k);
 	int size_rows() { return size_row; };
