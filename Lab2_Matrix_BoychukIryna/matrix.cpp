@@ -22,7 +22,6 @@ Matrix::Matrix(int m, int n, FillMethod fillMethod, double fillNumber)
 	for (int i = 0; i < size_row; i++)
 		M[i] = new double[size_column] {};
 	double k = 0, a;
-	//Заповнення
 	switch (fillMethod)
 	{
 	case Random:
@@ -122,9 +121,10 @@ Matrix Matrix::operator +(Matrix & matrix)
 
 Matrix Matrix::operator -(Matrix & matrix)
 {
-	Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
-	if ((size_row == this->size_row) && (size_column == this->size_column))
+	
+	if ((size_row == matrix.size_row) && (size_column== matrix.size_column))
 	{
+		Matrix matrixTemp(matrix.size_row, matrix.size_column, Zero);
 		for (int i = 0; i < matrix.size_row; i++)
 		{
 			for (int j = 0; j < matrix.size_column; j++)
@@ -134,7 +134,10 @@ Matrix Matrix::operator -(Matrix & matrix)
 		}
 		return matrixTemp;
 	}
-	//TODO else
+	else
+	{
+		throw "It is impossible to do sub";
+	}
 }
 
 
@@ -217,8 +220,6 @@ istream & operator>>(istream & os, const Matrix & matrix)
 
 		for (int j = 0; j < matrix.size_column; j++)
 			os >> matrix.M[i][j];
-
-
 	}
 
 	return os;
@@ -241,24 +242,6 @@ bool Matrix:: operator==(Matrix & matrix)
 	return true;
 }
 
-void Matrix::checkResult(Matrix task, Matrix answer) {
-	for (int row = 0; row < task.size_rows(); row++)
-	{
-		double sum = 0;
-		cout << endl << "row " << row << endl;
-		for (int column = 0; column < task.size_columns() - 1; column++)
-		{
-			cout << task[row][column] << "*" << answer[column][answer.size_columns() - 1] << endl;
-			sum += task[row][column] * answer[column][answer.size_columns() - 1];
-		}
-		cout << "sum " << sum << endl;
-		cout << "task " << task[row][task.size_columns() - 1] << endl;
-		cout << sum - task[row][task.size_columns() - 1] << endl;
-		if (sum != task[row][task.size_columns() - 1]) {
-			cout << row << " error" << endl;
-		}
-	}
-}
 
 
 bool Matrix::isSimmetrial()
@@ -424,8 +407,8 @@ Matrix Matrix::Kachmag()
 
 	double *tempRow = getColumn(size_column);
 	this->deleteColumn(size_column);
-	Matrix matrixTemp(1, size_column, Zero);
-	matrixTemp.M[0] = tempRow;
+	Matrix firstRow(1, size_column, Zero);
+	firstRow.M[0] = tempRow;
 
 	tempRow = getRow(1);
 	Matrix x(1, size_column, Zero);
@@ -440,7 +423,7 @@ Matrix Matrix::Kachmag()
 	{
 		tempRow = getRow(j + 1);
 		matrixAi.M[0] = tempRow;
-		temp = ((matrixTemp.M[0][j] - matrixAi.scalMultiplication(x)) / (matrixAi.Norma()*matrixAi.Norma()));
+		temp = ((firstRow.M[0][j] - matrixAi.scalMultiplication(x)) / (matrixAi.Norma()*matrixAi.Norma()));
 
 		matrixAi = matrixAi * temp;
 		x1 = x + matrixAi;
@@ -451,7 +434,7 @@ Matrix Matrix::Kachmag()
 			j++;
 		else j = 0;
 	}
-	cout << x;
+	cout << "x="<<x;
 	return x;
 }
 
@@ -534,3 +517,22 @@ Matrix Matrix::Kachmag()
 //	}
 //
 //}
+
+//void Matrix::checkResult(Matrix task, Matrix answer) {
+	//	for (int row = 0; row < task.size_rows(); row++)
+	//	{
+	//		double sum = 0;
+	//		cout << endl << "row " << row << endl;
+	//		for (int column = 0; column < task.size_columns() - 1; column++)
+	//		{
+	//			cout << task[row][column] << "*" << answer[column][answer.size_columns() - 1] << endl;
+	//			sum += task[row][column] * answer[column][answer.size_columns() - 1];
+	//		}
+	//		cout << "sum " << sum << endl;
+	//		cout << "task " << task[row][task.size_columns() - 1] << endl;
+	//		cout << sum - task[row][task.size_columns() - 1] << endl;
+	//		if (sum != task[row][task.size_columns() - 1]) {
+	//			cout << row << " error" << endl;
+	//		}
+	//	}
+	//}

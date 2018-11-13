@@ -22,18 +22,11 @@ int main()
 {
 	try
 	{
-		Matrix FirstMatrix(3, 4, Console);
+		Matrix FirstMatrix(3, 4, Random);
 		Matrix SecondMatrix(4, 4, Random);
 		cout << FirstMatrix << endl;
-		/*cout << ~FirstMatrix << endl;
-		cout << SecondMatrix << endl;
-		cout << FirstMatrix * SecondMatrix << endl;*/
-
-
 		//FirstMatrix.Gauss();
-		//TestOperators();
 		FirstMatrix.Kachmag();
-		//cout << FirstMatrix;
 	}
 	catch (char* ex)
 	{

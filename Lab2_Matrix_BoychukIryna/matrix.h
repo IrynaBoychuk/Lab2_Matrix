@@ -22,20 +22,19 @@ public:
 	Matrix(int m, int n): Matrix( m,  n, Zero){}
 	Matrix(int m, int n, FillMethod fillMethod = FillMethod::Zero, double fillNumber = 0);
 
-	Matrix& operator =(const Matrix& matrix);// матриц≥ присвоюЇтьс€ повн≥стю елементи ≥ншоњ матриц≥
-	Matrix& operator =(const double& num); // матриц€ заповнюЇтьс€ однаковим числом
-	bool operator ==(Matrix & matrix); // todo
+	Matrix& operator =(const Matrix& matrix);
+	Matrix& operator =(const double& num); 
+	bool operator ==(Matrix & matrix); 
 	Matrix operator + (Matrix & matrix);
 	Matrix operator - (Matrix & matrix);
-	Matrix operator * (Matrix & matrix);// matrix*matrix
-	Matrix operator * (double num) const; // matrix*num
+	Matrix operator * (Matrix & matrix);
+	Matrix operator * (double num) const; 
 	friend ostream & operator<<(ostream & os, const Matrix & that);
 	friend istream & operator>>(istream & os, const Matrix & that);
 	friend Matrix operator ~(Matrix &matrix);
 	double* operator [](int); //	доступ до елемента
-	//TODO
+	
 	double scalMultiplication(Matrix &matrix);
-
     void Gauss();
 	Matrix Kachmag();
 	Matrix getGaussResult(Matrix &upper); //
@@ -48,7 +47,7 @@ public:
 	int argMax(int k);
 	int size_rows() { return size_row; };
 	int size_columns() { return size_column; };
-	void checkResult(Matrix task, Matrix answer);
+	//void checkResult(Matrix task, Matrix answer);
 };
 
 
